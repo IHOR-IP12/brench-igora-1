@@ -15,34 +15,42 @@ pinMode(buzzerPin, OUTPUT);
 pinMode(batteryPin, INPUT);
 Serial.begin(9600);
 }
+
 long distance(long time)
 {
 long distanceCalc;
 distanceCalc = ((time * 0.034) / 2); // centimeters
 return distanceCalc;
 }
+
 void loop()
 {
 digitalWrite(trigPin, LOW);
-delayMicroseconds(1);
+delayMicroseconds(2);
 digitalWrite(trigPin, HIGH);
-delayMicroseconds(3);
+delayMicroseconds(10);
 digitalWrite(trigPin, LOW);
 duration = pulseIn(echoPin, HIGH);
 long distanceCm = distance(duration);
+
 if (distanceCm <= 160 && distanceCm > 50)
 {
 digitalWrite(motor,HIGH);
-tone(buzzerPin, 1000, 500); 
+tone(buzzerPin, 1000, 500);
 }
 else
 {
 digitalWrite(motor,LOW);
-noTone(buzzerPin); 
+noTone(buzzerPin);
 }
+
+voltage = (analogRead(batteryPin) * 5.0) / 1023.0; // Read the battery voltage
+Serial.print("Battery voltage: ");
+Serial.print(voltage);
+Serial.println(" V");
+
 Serial.print("Distance = ");
 Serial.print(distanceCm);
 Serial.println (" cm");
 delay(500);
-}
 }
